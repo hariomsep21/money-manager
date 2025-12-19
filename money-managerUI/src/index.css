@@ -102,6 +102,25 @@ button {
   justify-content: center;
 }
 
+/* Action icon styling and hover feedback */
+.icon-action {
+  color: var(--text-secondary);
+  transition: color 0.2s ease, transform 0.12s ease;
+}
+.icon-action:hover {
+  transform: translateY(-1px);
+}
+.icon-action.delete:hover {
+  color: var(--accent-red);
+}
+.icon-action.edit:hover,
+.icon-action.save:hover {
+  color: var(--accent-green);
+}
+.icon-action.cancel:hover {
+  color: var(--text-muted);
+}
+
 /* Modal */
 .modal-backdrop {
   position: fixed;

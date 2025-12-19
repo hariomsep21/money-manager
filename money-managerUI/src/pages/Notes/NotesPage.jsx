@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Pencil, Trash, Check, X } from 'lucide-react';
 
 const NotesPage = () => {
     const { notes, updateNote } = useContext(GlobalContext);
@@ -11,26 +11,61 @@ const NotesPage = () => {
     const getMonthYearKey = (date) => `${date.getFullYear()}-${date.getMonth()}`;
     const noteKey = getMonthYearKey(currentDate);
 
-    // Load initial note
-    const [localNote, setLocalNote] = useState('');
-    const [noteDate, setNoteDate] = useState(null);
+    // Notes list for selected month
+    const monthNotes = Array.isArray(notes[noteKey])
+        ? notes[noteKey]
+        : (typeof notes[noteKey] === 'string' && notes[noteKey].trim())
+            ? [{ id: `legacy-${noteKey}`, text: notes[noteKey], createdAt: new Date().toISOString() }]
+            : [];
 
-    // Update local note when date changes
+    const [isAdding, setIsAdding] = useState(false);
+    const [newNote, setNewNote] = useState('');
+    const [editingId, setEditingId] = useState(null);
+    const [editingText, setEditingText] = useState('');
+
     useEffect(() => {
-        const savedNote = notes[noteKey];
-        if (typeof savedNote === 'object' && savedNote !== null) {
-            setLocalNote(savedNote.text || '');
-            setNoteDate(savedNote.date);
-        } else {
-            setLocalNote(savedNote || '');
-            setNoteDate(null);
-        }
-    }, [noteKey, notes]);
+        // Reset add input when switching months
+        setIsAdding(false);
+        setNewNote('');
+    }, [noteKey]);
 
-    const handleNoteSave = () => {
-        const dateStr = new Date().toISOString();
-        updateNote(noteKey, { text: localNote, date: dateStr });
-        setNoteDate(dateStr);
+    const handleSaveNewNote = () => {
+        const text = (newNote || '').trim();
+        if (!text) return;
+        const item = { id: `note-${Date.now()}`, text, createdAt: new Date().toISOString() };
+        const updated = [...monthNotes, item];
+        updateNote(noteKey, updated);
+        setNewNote('');
+        setIsAdding(false);
+    };
+
+    const handleDeleteNote = (id) => {
+        const updated = monthNotes.filter(n => n.id !== id);
+        updateNote(noteKey, updated);
+        // If deleting the currently editing note, clear edit state
+        if (editingId === id) {
+            setEditingId(null);
+            setEditingText('');
+        }
+    };
+
+    const startEditNote = (n) => {
+        setEditingId(n.id);
+        setEditingText(n.text);
+    };
+
+    const handleSaveEdit = () => {
+        const text = (editingText || '').trim();
+        if (!editingId) return;
+        const updated = monthNotes.map(n => n.id === editingId ? { ...n, text } : n);
+        updateNote(noteKey, updated);
+        setEditingId(null);
+        setEditingText('');
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setEditingText('');
     };
 
     const prevMonth = () => {
@@ -59,7 +94,6 @@ const NotesPage = () => {
 
     return (
         <div className="container" style={{ paddingBottom: '80px' }}>
-            <h1 className="page-title">Notes</h1>
 
             {/* Header: Month Selector */}
             <div style={{ marginBottom: '1.5rem' }}>
@@ -69,10 +103,9 @@ const NotesPage = () => {
                     </button>
                     <div
                         onClick={() => setShowDatePicker(!showDatePicker)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+                        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                     >
                         <h2 style={{ fontSize: '1.2rem' }}>{currentDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</h2>
-                        <ChevronDown size={16} style={{ opacity: 0.7 }} />
                     </div>
                     <button className="icon-btn" onClick={nextMonth}>
                         <ChevronRight size={24} />
@@ -106,47 +139,73 @@ const NotesPage = () => {
                 )}
             </div>
 
-            <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column' }}>
-                <textarea
-                    className="input-field"
-                    value={localNote}
-                    onChange={(e) => setLocalNote(e.target.value)}
-                    placeholder={`Write your notes for ${currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}...`}
-                    style={{
-                        width: '100%',
-                        flex: 1,
-                        minHeight: '200px',
-                        resize: 'none',
-                        fontFamily: 'inherit',
-                        border: 'none',
-                        background: 'transparent',
-                        marginBottom: '0.5rem'
-                    }}
-                />
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        {noteDate ? `Last saved: ${new Date(noteDate).toLocaleString()}` : ''}
-                    </span>
+            <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: 600 }}>Notes for {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                    <button className="icon-btn" aria-label="Add Note" title="Add Note" onClick={() => setIsAdding(true)}>
+                        <Plus size={22} />
+                    </button>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                            updateNote(noteKey, '');
-                            setLocalNote('');
-                        }}
-                        style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)' }}
-                    >
-                        Delete
-                    </button>
-                    <button
-                        className="btn btn-primary"
-                        onClick={handleNoteSave}
-                        style={{ background: 'var(--accent-blue)' }}
-                    >
-                        Save Note
-                    </button>
+
+                {/* Add Note Input */}
+                {isAdding && (
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <input
+                            className="input-field"
+                            value={newNote}
+                            onChange={(e) => setNewNote(e.target.value)}
+                            placeholder="Write a note..."
+                            style={{ flex: 1 }}
+                            autoFocus
+                        />
+                        <button className="icon-btn icon-action save" aria-label="Save" title="Save" onClick={handleSaveNewNote}>
+                            <Check size={20} />
+                        </button>
+                        <button className="icon-btn icon-action cancel" aria-label="Cancel" title="Cancel" onClick={() => { setIsAdding(false); setNewNote(''); }}>
+                            <X size={20} />
+                        </button>
+                    </div>
+                )}
+
+                {/* Notes List */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {monthNotes.length === 0 && (
+                        <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>No notes yet. Click + to add one.</div>
+                    )}
+                    {monthNotes.map((n) => (
+                        <div key={n.id} style={{ border: '1px solid var(--border-color)', borderRadius: '10px', padding: '0.75rem' }}>
+                            {editingId === n.id ? (
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    <input
+                                        className="input-field"
+                                        value={editingText}
+                                        onChange={(e) => setEditingText(e.target.value)}
+                                        style={{ flex: 1 }}
+                                        autoFocus
+                                    />
+                                    <button className="icon-btn icon-action save" aria-label="Save" title="Save" onClick={handleSaveEdit}>
+                                        <Check size={18} />
+                                    </button>
+                                    <button className="icon-btn icon-action cancel" aria-label="Cancel" title="Cancel" onClick={handleCancelEdit}>
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontSize: '0.95rem' }}>{n.text}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+                                            {new Date(n.createdAt).toLocaleString()}
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <button className="icon-btn icon-action edit" aria-label="Edit" title="Edit" onClick={() => startEditNote(n)}><Pencil size={18} /></button>
+                                        <button className="icon-btn icon-action delete" aria-label="Delete" title="Delete" onClick={() => handleDeleteNote(n.id)}><Trash size={18} /></button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
