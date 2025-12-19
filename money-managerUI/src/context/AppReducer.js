@@ -5,6 +5,11 @@ export default (state, action) => {
         ...state,
         ...action.payload,
       };
+    case 'UPDATE_NOTIFICATIONS':
+      return {
+        ...state,
+        notifications: { ...state.notifications, ...action.payload },
+      };
     case 'DELETE_TRANSACTION':
       return {
         ...state,

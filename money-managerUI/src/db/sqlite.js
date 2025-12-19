@@ -146,6 +146,23 @@ export async function loadInitialState() {
   return { transactions, user, currency, theme, notes };
 }
 
+export async function getNotificationSettings() {
+  const dbi = await initDB();
+  const rows = dbi.exec("SELECT value FROM settings WHERE key='notifications'");
+  if (rows.length && rows[0].values.length) {
+    try { return JSON.parse(rows[0].values[0][0]); } catch { /* ignore */ }
+  }
+  return { enabled: false, message: 'Remember to review today\'s transactions.', time: '20:00' };
+}
+
+export async function setNotificationSettings(settings) {
+  const dbi = await initDB();
+  const stmt = dbi.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
+  stmt.run(['notifications', JSON.stringify(settings)]);
+  stmt.free();
+  await persist();
+}
+
 export async function addTransaction(t) {
   const dbi = await initDB();
   const stmt = dbi.prepare('INSERT OR REPLACE INTO transactions (id, description, amount, type, category, date) VALUES (?, ?, ?, ?, ?, ?)');

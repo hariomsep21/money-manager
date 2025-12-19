@@ -20,7 +20,7 @@ const BottomNav = () => {
             </NavLink>
             <NavLink to="/accounts" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <Wallet size={24} />
-                <span>Accounts</span>
+                <span>My Profile</span>
             </NavLink>
         </nav>
     );

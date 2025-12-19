@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
-import { Wallet, Moon, Sun } from 'lucide-react';
+import { Wallet, Moon, Sun, Bell } from 'lucide-react';
 
 const AccountsPage = () => {
-    const { currency, changeCurrency, theme, toggleTheme } = useContext(GlobalContext);
+    const { currency, changeCurrency, theme, toggleTheme, notifications, updateNotifications } = useContext(GlobalContext);
 
     return (
         <div className="container">
-            <h1 className="page-title">Accounts & Settings</h1>
+            <h1 className="page-title">My Profile</h1>
 
             <div className="glass-panel" style={{ padding: '0.5rem 1.5rem' }}>
                 {/* Currency Section */}
@@ -71,6 +71,70 @@ const AccountsPage = () => {
                         </span>
                     </label>
                 </div>
+
+                {/* Notifications Section */}
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '1.2rem 0',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ background: 'rgba(16, 185, 129, 0.2)', padding: '8px', borderRadius: '10px' }}>
+                            <Bell size={20} color="#10b981" />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: '1rem' }}>Daily Reminder</span>
+                            <small style={{ opacity: 0.7 }}>Notify at a chosen time</small>
+                        </div>
+                    </div>
+                    <label style={{ position: 'relative', display: 'inline-block', width: '50px', height: '28px' }}>
+                        <input
+                            type="checkbox"
+                            checked={!!notifications?.enabled}
+                            onChange={(e) => updateNotifications({ enabled: e.target.checked })}
+                            style={{ opacity: 0, width: 0, height: 0 }}
+                        />
+                        <span style={{
+                            position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
+                            backgroundColor: notifications?.enabled ? '#10b981' : '#4b5563',
+                            transition: '.4s', borderRadius: '34px'
+                        }}>
+                            <span style={{
+                                position: 'absolute', content: '""', height: '20px', width: '20px', left: '4px', bottom: '4px',
+                                backgroundColor: 'white', transition: '.4s', borderRadius: '50%',
+                                transform: notifications?.enabled ? 'translateX(22px)' : 'translateX(0)'
+                            }}></span>
+                        </span>
+                    </label>
+                </div>
+
+                {notifications?.enabled && (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', paddingBottom: '1rem' }}>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '0.4rem' }}>Reminder Time</label>
+                            <input
+                                type="time"
+                                className="input-field"
+                                value={notifications?.time || '20:00'}
+                                onChange={(e) => updateNotifications({ time: e.target.value })}
+                                style={{ width: '100%' }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '0.4rem' }}>Custom Message</label>
+                            <input
+                                type="text"
+                                className="input-field"
+                                value={notifications?.message || "Remember to review today's transactions."}
+                                onChange={(e) => updateNotifications({ message: e.target.value })}
+                                placeholder="Your reminder message"
+                                style={{ width: '100%' }}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
