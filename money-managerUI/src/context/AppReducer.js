@@ -5,10 +5,25 @@ export default (state, action) => {
         ...state,
         ...action.payload,
       };
-    case 'UPDATE_NOTIFICATIONS':
+    case 'SET_NOTIFICATIONS':
       return {
         ...state,
-        notifications: { ...state.notifications, ...action.payload },
+        notifications: action.payload,
+      };
+    case 'ADD_NOTIFICATION':
+      return {
+        ...state,
+        notifications: [action.payload, ...(state.notifications || [])],
+      };
+    case 'UPDATE_NOTIFICATION':
+      return {
+        ...state,
+        notifications: (state.notifications || []).map(n => n.id === action.payload.id ? action.payload : n),
+      };
+    case 'DELETE_NOTIFICATION':
+      return {
+        ...state,
+        notifications: (state.notifications || []).filter(n => n.id !== action.payload),
       };
     case 'DELETE_TRANSACTION':
       return {

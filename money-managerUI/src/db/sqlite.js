@@ -77,6 +77,13 @@ async function initDB() {
       key TEXT PRIMARY KEY,
       value TEXT
     );
+    CREATE TABLE IF NOT EXISTS notifications (
+      id TEXT PRIMARY KEY,
+      time TEXT,
+      message TEXT,
+      enabled INTEGER,
+      recurrence TEXT
+    );
   `);
   await persist();
   return db;
@@ -116,9 +123,31 @@ function migrateFromLocalStorageIfEmpty() {
   }
 }
 
+function migrateLegacyNotifications() {
+  try {
+    const notifCount = db.exec('SELECT COUNT(*) FROM notifications');
+    const hasNotifs = notifCount.length && notifCount[0].values[0][0] > 0;
+    if (hasNotifs) return;
+    const rows = db.exec("SELECT value FROM settings WHERE key='notifications'");
+    if (rows.length && rows[0].values.length) {
+      const raw = rows[0].values[0][0];
+      let obj;
+      try { obj = JSON.parse(raw); } catch { obj = null; }
+      if (obj) {
+        const stmt = db.prepare('INSERT OR REPLACE INTO notifications (id, time, message, enabled, recurrence) VALUES (?, ?, ?, ?, ?)');
+        stmt.run(['notif-1', obj.time || '20:00', obj.message || "Remember to review today's transactions.", obj.enabled ? 1 : 0, 'daily']);
+        stmt.free();
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+}
+
 export async function loadInitialState() {
   const dbi = await initDB();
   migrateFromLocalStorageIfEmpty();
+  migrateLegacyNotifications();
   await persist();
   const txRows = dbi.exec('SELECT id, description, amount, type, category, date FROM transactions');
   const transactions = txRows.length
@@ -159,6 +188,44 @@ export async function setNotificationSettings(settings) {
   const dbi = await initDB();
   const stmt = dbi.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
   stmt.run(['notifications', JSON.stringify(settings)]);
+  stmt.free();
+  await persist();
+}
+
+// Multiple notifications API
+export async function listNotifications() {
+  const dbi = await initDB();
+  const rows = dbi.exec('SELECT id, time, message, enabled, recurrence FROM notifications');
+  if (!rows.length) return [];
+  return rows[0].values.map(([id, time, message, enabled, recurrence]) => ({
+    id,
+    time,
+    message,
+    enabled: !!enabled,
+    recurrence: recurrence || 'daily',
+  }));
+}
+
+export async function createNotification(n) {
+  const dbi = await initDB();
+  const stmt = dbi.prepare('INSERT OR REPLACE INTO notifications (id, time, message, enabled, recurrence) VALUES (?, ?, ?, ?, ?)');
+  stmt.run([n.id, n.time, n.message || "Remember to review today's transactions.", n.enabled ? 1 : 0, n.recurrence || 'daily']);
+  stmt.free();
+  await persist();
+}
+
+export async function updateNotification(n) {
+  const dbi = await initDB();
+  const stmt = dbi.prepare('INSERT OR REPLACE INTO notifications (id, time, message, enabled, recurrence) VALUES (?, ?, ?, ?, ?)');
+  stmt.run([n.id, n.time, n.message || "Remember to review today's transactions.", n.enabled ? 1 : 0, n.recurrence || 'daily']);
+  stmt.free();
+  await persist();
+}
+
+export async function deleteNotification(id) {
+  const dbi = await initDB();
+  const stmt = dbi.prepare('DELETE FROM notifications WHERE id = ?');
+  stmt.run([id]);
   stmt.free();
   await persist();
 }

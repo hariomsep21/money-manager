@@ -10,8 +10,10 @@ import {
     setTheme,
     setNote,
     deleteNote,
-    getNotificationSettings,
-    setNotificationSettings
+    listNotifications,
+    createNotification as dbCreateNotification,
+    updateNotification as dbUpdateNotification,
+    deleteNotification as dbDeleteNotification
 } from '../db/sqlite';
 
 // Initial state
@@ -21,7 +23,7 @@ const initialState = {
     currency: 'USD',
     theme: 'dark',
     notes: {},
-    notifications: { enabled: false, message: "Remember to review today's transactions.", time: '20:00' }
+    notifications: []
 };
 
 // Create context
@@ -82,44 +84,70 @@ export const GlobalProvider = ({ children }) => {
     }
 
     // Notifications
-    const scheduleRef = React.useRef(null);
-    function scheduleNotification(settings) {
-        if (scheduleRef.current) {
-            clearTimeout(scheduleRef.current);
-            scheduleRef.current = null;
+    // Multi notifications scheduling
+    const timersRef = React.useRef(new Map());
+    function clearTimerFor(id) {
+        const t = timersRef.current.get(id);
+        if (t) {
+            clearTimeout(t);
+            timersRef.current.delete(id);
         }
-        if (!settings?.enabled) return;
-        const [hh, mm] = (settings.time || '20:00').split(':').map(n => parseInt(n, 10));
+    }
+    function scheduleNotificationItem(item) {
+        clearTimerFor(item.id);
+        if (!item.enabled) return;
+        const [hh, mm] = (item.time || '20:00').split(':').map(n => parseInt(n, 10));
         const now = new Date();
         const next = new Date();
         next.setHours(hh, mm, 0, 0);
         if (next <= now) next.setDate(next.getDate() + 1);
         const delay = next.getTime() - now.getTime();
-        scheduleRef.current = setTimeout(() => {
+        const timerId = setTimeout(() => {
             try {
-                if (Notification && Notification.permission === 'granted') {
-                    new Notification(settings.message || "Remember to review today's transactions.");
+                if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                    new Notification(item.message || "Remember to review today's transactions.");
                 } else {
-                    // Fallback: simple alert if permission not granted
-                    alert(settings.message || "Remember to review today's transactions.");
+                    alert(item.message || "Remember to review today's transactions.");
                 }
             } catch {
-                alert(settings.message || "Remember to review today's transactions.");
+                alert(item.message || "Remember to review today's transactions.");
             }
-            // reschedule for next day
-            scheduleNotification(settings);
+            // reschedule if recurring
+            if ((item.recurrence || 'daily') === 'daily') {
+                scheduleNotificationItem(item);
+            } else {
+                clearTimerFor(item.id);
+            }
         }, delay);
+        timersRef.current.set(item.id, timerId);
+    }
+    function scheduleAll(items) {
+        (items || []).forEach(scheduleNotificationItem);
     }
 
-    async function updateNotifications(newSettings) {
-        const merged = { ...state.notifications, ...newSettings };
-        // ask permission when enabling
-        if (merged.enabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+    async function addNotification(item) {
+        const id = item.id || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const toSave = { id, time: item.time, message: item.message, enabled: !!item.enabled, recurrence: item.recurrence || 'daily' };
+        if (toSave.enabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
             try { await Notification.requestPermission(); } catch { /* ignore */ }
         }
-        await setNotificationSettings(merged);
-        dispatch({ type: 'UPDATE_NOTIFICATIONS', payload: merged });
-        scheduleNotification(merged);
+        await dbCreateNotification(toSave);
+        dispatch({ type: 'ADD_NOTIFICATION', payload: toSave });
+        scheduleNotificationItem(toSave);
+    }
+    async function editNotification(item) {
+        const toSave = { id: item.id, time: item.time, message: item.message, enabled: !!item.enabled, recurrence: item.recurrence || 'daily' };
+        if (toSave.enabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+            try { await Notification.requestPermission(); } catch { /* ignore */ }
+        }
+        await dbUpdateNotification(toSave);
+        dispatch({ type: 'UPDATE_NOTIFICATION', payload: toSave });
+        scheduleNotificationItem(toSave);
+    }
+    async function removeNotification(id) {
+        clearTimerFor(id);
+        await dbDeleteNotification(id);
+        dispatch({ type: 'DELETE_NOTIFICATION', payload: id });
     }
 
     // Initial load from SQLite
@@ -127,14 +155,15 @@ export const GlobalProvider = ({ children }) => {
         let mounted = true;
         (async () => {
             const initial = await loadInitialState();
-            const notif = await getNotificationSettings();
+            const notifList = await listNotifications();
             if (mounted) {
-                dispatch({ type: 'INIT_STATE', payload: { ...initial, notifications: notif } });
+                dispatch({ type: 'INIT_STATE', payload: initial });
+                dispatch({ type: 'SET_NOTIFICATIONS', payload: notifList });
                 document.body.setAttribute('data-theme', initial.theme);
-                scheduleNotification(notif);
+                scheduleAll(notifList);
             }
         })();
-        return () => { mounted = false; if (scheduleRef.current) clearTimeout(scheduleRef.current); };
+        return () => { mounted = false; timersRef.current.forEach(t => clearTimeout(t)); timersRef.current.clear(); };
     }, []);
 
     // Keep theme attribute updated
@@ -159,7 +188,9 @@ export const GlobalProvider = ({ children }) => {
                 updateNote
                 ,
                 notifications: state.notifications,
-                updateNotifications
+                addNotification,
+                editNotification,
+                removeNotification
             }}
         >
             {children}

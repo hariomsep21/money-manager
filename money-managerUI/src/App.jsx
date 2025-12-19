@@ -9,6 +9,7 @@ import AnalyticsPage from './pages/Analytics/AnalyticsPage';
 import NotesPage from './pages/Notes/NotesPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import AccountsPage from './pages/Accounts/AccountsPage';
+import NotificationsPage from './pages/Notifications/NotificationsPage';
 import { InstallPWA } from './components/InstallPWA';
 import './App.css';
 
@@ -27,6 +28,7 @@ function AppContent() {
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/accounts" element={<AccountsPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Routes>
       </div>
       {!isLanding && <BottomNav />}
