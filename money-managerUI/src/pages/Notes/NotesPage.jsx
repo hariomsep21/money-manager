@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
-import { ChevronLeft, ChevronRight, Plus, Pencil, Trash, Check, X } from 'lucide-react';
+import { Plus, Pencil, Trash, Check, X } from 'lucide-react';
+import MonthYearSelector from '../../components/MonthYearSelector';
 
 const NotesPage = () => {
     const { notes, updateNote } = useContext(GlobalContext);
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
 
     // Helper for Notes Key
     const getMonthYearKey = (date) => `${date.getFullYear()}-${date.getMonth()}`;
@@ -68,76 +68,15 @@ const NotesPage = () => {
         setEditingText('');
     };
 
-    const prevMonth = () => {
-        setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
-    };
-
-    const nextMonth = () => {
-        setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
-    };
-
-    const handleYearChange = (e) => {
-        const newYear = parseInt(e.target.value);
-        const newDate = new Date(currentDate);
-        newDate.setFullYear(newYear);
-        setCurrentDate(newDate);
-        setShowDatePicker(false); // Auto-close
-    };
-
-    const handleMonthChange = (e) => {
-        const newMonth = parseInt(e.target.value);
-        const newDate = new Date(currentDate);
-        newDate.setMonth(newMonth);
-        setCurrentDate(newDate);
-        setShowDatePicker(false); // Auto-close
+    const handleDateChange = (d) => {
+        setCurrentDate(d);
     };
 
     return (
         <div className="container" style={{ paddingBottom: '80px' }}>
 
-            {/* Header: Month Selector */}
-            <div style={{ marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <button className="icon-btn" onClick={prevMonth}>
-                        <ChevronLeft size={24} />
-                    </button>
-                    <div
-                        onClick={() => setShowDatePicker(!showDatePicker)}
-                        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    >
-                        <h2 style={{ fontSize: '1.2rem' }}>{currentDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</h2>
-                    </div>
-                    <button className="icon-btn" onClick={nextMonth}>
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
-
-                {/* Date Picker Dropdown */}
-                {showDatePicker && (
-                    <div className="glass-panel" style={{ marginTop: '1rem', padding: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                        <select
-                            className="input-field"
-                            value={currentDate.getFullYear()}
-                            onChange={handleYearChange}
-                            style={{ width: 'auto' }}
-                        >
-                            {Array.from({ length: 11 }, (_, i) => 2020 + i).map(year => (
-                                <option key={year} value={year}>{year}</option>
-                            ))}
-                        </select>
-                        <select
-                            className="input-field"
-                            value={currentDate.getMonth()}
-                            onChange={handleMonthChange}
-                            style={{ width: 'auto' }}
-                        >
-                            {Array.from({ length: 12 }, (_, i) => i).map(month => (
-                                <option key={month} value={month}>{new Date(0, month).toLocaleString('en-US', { month: 'long' })}</option>
-                            ))}
-                        </select>
-                    </div>
-                )}
-            </div>
+            {/* Header: Shared Month-Year Selector */}
+            <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
             <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

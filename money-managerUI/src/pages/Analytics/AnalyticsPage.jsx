@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { PieChart as PieIcon, TrendingUp } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis, BarChart, Bar, CartesianGrid } from 'recharts';
+import { PieChart as PieIcon, BarChart3 } from 'lucide-react';
+import MonthYearSelector from '../../components/MonthYearSelector';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF5252', '#448AFF'];
 
 const AnalyticsPage = () => {
     const { transactions, currency } = useContext(GlobalContext);
-    const [chartType, setChartType] = useState('pie'); // pie, line
+    const [chartType, setChartType] = useState('pie'); // pie, bar
     const [currentDate, setCurrentDate] = useState(new Date());
 
     // Filter by month
@@ -29,11 +30,18 @@ const AnalyticsPage = () => {
         acc[cat] += Math.abs(t.amount);
         return acc;
     }, {});
-
-    const chartData = Object.keys(categoryData).map(key => ({
-        name: key,
-        value: categoryData[key]
-    }));
+    
+    // Prepare and sort chart data descending by expense amount
+    const preferredOrder = ['Health', 'Food', 'Other'];
+    const sortedChartData = Object.keys(categoryData)
+        .map(key => ({ name: key, value: categoryData[key] }))
+        .sort((a, b) => {
+            const byAmount = b.value - a.value;
+            if (byAmount !== 0) return byAmount;
+            const ai = preferredOrder.indexOf(a.name);
+            const bi = preferredOrder.indexOf(b.name);
+            return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
+        });
 
     // Daily Spend Data (for Line Chart)
     const dailyDataObj = expenses.reduce((acc, t) => {
@@ -51,16 +59,11 @@ const AnalyticsPage = () => {
     })).sort((a, b) => new Date(a.fullDate) - new Date(b.fullDate));
 
 
-    const prevMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
-    const nextMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
+    const handleDateChange = (d) => setCurrentDate(d);
 
     return (
         <div className="container" style={{ paddingBottom: '80px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <button className="icon-btn" onClick={prevMonth}>&lt;</button>
-                <h2 style={{ fontSize: '1.2rem' }}>{currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
-                <button className="icon-btn" onClick={nextMonth}>&gt;</button>
-            </div>
+            <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
                 <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -92,13 +95,13 @@ const AnalyticsPage = () => {
                     <button className={`icon-btn ${chartType === 'pie' ? 'active' : ''}`} onClick={() => setChartType('pie')} style={{ color: chartType === 'pie' ? 'var(--accent-blue)' : '' }}>
                         <PieIcon size={24} />
                     </button>
-                    <button className={`icon-btn ${chartType === 'line' ? 'active' : ''}`} onClick={() => setChartType('line')} style={{ color: chartType === 'line' ? 'var(--accent-blue)' : '' }}>
-                        <TrendingUp size={24} />
+                    <button className={`icon-btn ${chartType === 'bar' ? 'active' : ''}`} onClick={() => setChartType('bar')} style={{ color: chartType === 'bar' ? 'var(--accent-blue)' : '' }}>
+                        <BarChart3 size={24} />
                     </button>
                 </div>
 
                 <div style={{ height: '300px', width: '100%' }}>
-                    {chartData.length === 0 ? (
+                    {sortedChartData.length === 0 ? (
                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             No data for this month
                         </div>
@@ -108,7 +111,7 @@ const AnalyticsPage = () => {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
-                                            data={chartData}
+                                            data={sortedChartData}
                                             cx="50%"
                                             cy="50%"
                                             innerRadius={60}
@@ -117,7 +120,7 @@ const AnalyticsPage = () => {
                                             paddingAngle={5}
                                             dataKey="value"
                                         >
-                                            {chartData.map((entry, index) => (
+                                            {sortedChartData.map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                             ))}
                                         </Pie>
@@ -126,14 +129,20 @@ const AnalyticsPage = () => {
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
-                            {chartType === 'line' && (
+                            {chartType === 'bar' && (
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart data={lineChartData}>
-                                        <XAxis dataKey="date" stroke="#666" />
+                                    <BarChart data={sortedChartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                        <XAxis dataKey="name" stroke="#666" />
                                         <YAxis stroke="#666" />
                                         <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
-                                        <Line type="monotone" dataKey="amount" stroke="var(--accent-blue)" strokeWidth={2} dot={{ r: 4 }} />
-                                    </LineChart>
+                                        <Legend />
+                                        <Bar dataKey="value" name="Expense">
+                                            {sortedChartData.map((entry, index) => (
+                                                <Cell key={`bar-cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
                                 </ResponsiveContainer>
                             )}
                         </>
@@ -143,7 +152,7 @@ const AnalyticsPage = () => {
 
             <div className="glass-panel" style={{ padding: '1rem' }}>
                 <h3 style={{ marginBottom: '1rem' }}>Top Expenses</h3>
-                {chartData.sort((a, b) => b.value - a.value).map((item, index) => (
+                {sortedChartData.map((item, index) => (
                     <div key={index} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', alignItems: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div style={{ width: '12px', height: '12px', borderRadius: '2px', backgroundColor: COLORS[index % COLORS.length] }}></div>

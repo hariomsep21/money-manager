@@ -1,4 +1,13 @@
 {
+  "name": "money-managers-root",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm --prefix money-managerUI run dev",
+    "build": "npm --prefix money-managerUI run build",
+    "preview": "npm --prefix money-managerUI run preview",
+    "lint": "npm --prefix money-managerUI run lint"
+  },
   "dependencies": {
     "sql.js": "^1.13.0"
   }
