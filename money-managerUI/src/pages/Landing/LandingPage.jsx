@@ -48,7 +48,7 @@ const LandingPage = () => {
                 <h1 style={{
                     fontSize: '36px',
                     fontWeight: '700',
-                    color: 'var(--text-primary)',
+                    color: 'var(--heading-color)',
                     marginBottom: '8px',
                     letterSpacing: '1px'
                 }}>

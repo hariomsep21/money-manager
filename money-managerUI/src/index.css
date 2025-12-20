@@ -8,6 +8,10 @@
   --text-secondary: #aaaaaa;
   --text-muted: #666666;
 
+  /* Semantic text colors */
+  --heading-color: #ffffff;
+  --subheading-color: var(--text-secondary);
+
   --accent-primary: #ff5252;
   --accent-blue: #448aff;
   --accent-green: #69f0ae;
@@ -24,6 +28,10 @@
   --text-primary: #1f2937;
   --text-secondary: #4b5563;
   --text-muted: #9ca3af;
+
+  /* Semantic text colors */
+  --heading-color: #000000;
+  --subheading-color: var(--text-secondary);
 
   --accent-primary: #ef4444;
   /* Slightly darker red for visibility */
@@ -48,6 +56,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Global heading and subheading colors */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+}
+
+small {
+  color: var(--subheading-color);
+}
+
 .container {
   width: 100%;
   max-width: 600px;
@@ -67,6 +84,7 @@ body {
 .page-title {
   margin-bottom: 1rem;
   font-size: 1.5rem;
+  color: var(--heading-color);
 }
 
 /* Buttons */
@@ -157,8 +175,8 @@ button {
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .toggle-switch input:checked + .toggle-slider {
-  background: var(--accent-green);
-  border-color: var(--accent-green);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 .toggle-switch input:checked + .toggle-slider::before {
   transform: translateX(20px);
@@ -185,6 +203,7 @@ button {
 .modal-title {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
+  color: var(--heading-color);
 }
 
 .modal-grid {
@@ -200,6 +219,7 @@ button {
   display: block;
   font-size: 0.85rem;
   margin-bottom: 0.4rem;
+  color: var(--subheading-color);
 }
 
 .modal-actions {
@@ -232,4 +252,30 @@ button {
 }
 .time-input-wrapper:hover {
   cursor: pointer;
+}
+
+/* Nav cards */
+.nav-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.nav-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+.nav-card .nav-text {
+  text-align: center;
+  align-items: center;
+}
+
+/* Translucent accent background utility for icon chips */
+.accent-soft {
+  background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+}
+
+/* Global dropdown list item color */
+select option,
+.input-field option,
+select optgroup,
+.input-field optgroup {
+  color: #000; /* Ensure dropdown items render in black across themes */
 }

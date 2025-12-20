@@ -68,11 +68,11 @@ const MorePage = () => {
                 src={(logoUrl || user?.logoUrl)}
                 alt="Profile"
                 onError={() => setLogoError(true)}
-                style={{ width: 160, height: 160, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border-color)' }}
+                style={{ width: 160, height: 160, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border-color)', boxShadow: '0 6px 14px rgba(0,0,0,0.15)' }}
               />
             ) : (
               <div style={{
-                width: 160, height: 160, borderRadius: '50%', background: 'rgba(99, 102, 241, 0.2)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700
+                width: 160, height: 160, borderRadius: '50%', background: 'rgba(99, 102, 241, 0.2)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, border: '1px solid var(--border-color)', boxShadow: '0 6px 14px rgba(0,0,0,0.15)'
               }}>
                 {initials || <User size={48} color="var(--accent-primary)" />}
               </div>
@@ -100,11 +100,11 @@ const MorePage = () => {
         <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '1rem 0' }} />
         <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelected} style={{ display: 'none' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
-          <div className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', background: 'var(--bg-tertiary)' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(234, 179, 8, 0.18)', color: 'var(--accent-primary)' }}>
+          <div className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', boxShadow: '0 8px 22px rgba(0,0,0,0.12)', marginTop: '10px' }}>
+            <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
               {isLight ? <Sun size={20} /> : <Moon size={20} />}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <span style={{ fontWeight: 700 }}>Appearance</span>
               <small style={{ opacity: 0.75 }}>{isLight ? 'Light Mode' : 'Dark Mode'}</small>
             </div>
@@ -117,12 +117,12 @@ const MorePage = () => {
               <span className="toggle-slider"></span>
             </label>
           </div>
-          <Link to="/notifications" className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', background: 'var(--bg-tertiary)', textDecoration: 'none' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(99, 102, 241, 0.18)', color: 'var(--accent-primary)' }}>
+          <Link to="/notifications" className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', textDecoration: 'none', boxShadow: '0 8px 22px rgba(0,0,0,0.12)', marginTop: '10px' }}>
+            <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
               <Bell size={20} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center' }}>
-              <span style={{ fontWeight: 700, color: 'var(--accent-primary)', textAlign: 'center' }}>Alerts</span>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center' }}>
+              <span style={{ fontWeight: 700, color: 'var(--heading-color)', textAlign: 'center' }}>Alerts</span>
               <small style={{ opacity: 0.75, textAlign: 'center' }}>Manage notifications</small>
             </div>
           </Link>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import SimpleTimePicker from './SimpleTimePicker';
+import { X } from 'lucide-react';
 
 function formatTimeToHHMM(value) {
   if (!value) return '20:00';
@@ -63,7 +64,10 @@ export default function NotificationModal({
 
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Notification settings">
-      <div className="glass-panel modal-card">
+      <div className="glass-panel modal-card" style={{ position: 'relative' }}>
+        <button className="icon-btn" aria-label="Close" title="Close" onClick={onCancel} style={{ position: 'absolute', top: 8, right: 8 }}>
+          <X size={18} />
+        </button>
         <h2 className="modal-title">{initial?.id ? 'Edit Notification' : 'Add Notification'}</h2>
         <div className="modal-grid">
           <div className="modal-field">
@@ -93,7 +97,7 @@ export default function NotificationModal({
                 onChange={(e) => setForm((f) => ({ ...f, enabled: e.target.checked }))}
                 style={{ opacity: 0, width: 0, height: 0 }}
               />
-              <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: form.enabled ? '#10b981' : '#4b5563', transition: '.3s', borderRadius: '34px' }}>
+              <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: form.enabled ? 'var(--accent-primary)' : 'var(--text-secondary)', transition: '.3s', borderRadius: '34px' }}>
                 <span style={{ position: 'absolute', height: '16px', width: '16px', left: '4px', bottom: '4px', backgroundColor: 'white', transition: '.3s', borderRadius: '50%', transform: form.enabled ? 'translateX(20px)' : 'translateX(0)' }}></span>
               </span>
             </label>
@@ -114,7 +118,7 @@ export default function NotificationModal({
 
         <div className="modal-actions">
           <button className="btn btn-primary" style={{ background: 'var(--bg-tertiary)' }} onClick={onCancel}>Cancel</button>
-          <button className="btn btn-primary" style={{ background: '#10b981' }} onClick={handleSave}>Save</button>
+          <button className="btn btn-primary" style={{ background: 'var(--accent-primary)' }} onClick={handleSave}>Save</button>
         </div>
       </div>
     </div>
