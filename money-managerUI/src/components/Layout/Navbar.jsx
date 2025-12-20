@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Bell } from 'lucide-react';
+import { LayoutDashboard, Receipt, Bell, Sun, User } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -27,6 +27,18 @@ const Navbar = () => {
                         <NavLink to="/notifications" className={({ isActive }) => isActive ? 'active' : ''}>
                             <Bell size={20} />
                             <span>Notifications</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/theme" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <Sun size={20} />
+                            <span>Theme</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/more" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <User size={20} />
+                            <span>More</span>
                         </NavLink>
                     </li>
                 </ul>

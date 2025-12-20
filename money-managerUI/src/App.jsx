@@ -8,6 +8,8 @@ import AddTransactionPage from './pages/Transactions/AddTransactionPage';
 import AnalyticsPage from './pages/Analytics/AnalyticsPage';
 import NotesPage from './pages/Notes/NotesPage';
 import NotificationsPage from './pages/Notifications/NotificationsPage';
+import ThemePage from './pages/Theme/ThemePage';
+import MorePage from './pages/More/MorePage';
 import { InstallPWA } from './components/InstallPWA';
 import './App.css';
 
@@ -27,6 +29,8 @@ function AppContent() {
           {/* Profile route removed */}
           {/* Accounts section removed */}
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/theme" element={<ThemePage />} />
+          <Route path="/more" element={<MorePage />} />
         </Routes>
       </div>
       {!isLanding && <BottomNav />}
