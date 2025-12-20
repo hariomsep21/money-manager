@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutGrid, BarChart3, Bell, Notebook, Sun, User } from 'lucide-react';
+import { LayoutGrid, BarChart3, Notebook, User } from 'lucide-react';
 import './BottomNav.css';
 
 const BottomNav = () => {
@@ -17,14 +17,6 @@ const BottomNav = () => {
             <NavLink to="/notes" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <Notebook size={24} />
                 <span>Notes</span>
-            </NavLink>
-            <NavLink to="/notifications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                <Bell size={24} />
-                <span>Alerts</span>
-            </NavLink>
-            <NavLink to="/theme" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                <Sun size={24} />
-                <span>Theme</span>
             </NavLink>
             <NavLink to="/more" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <User size={24} />

@@ -1,14 +1,16 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { GlobalContext } from '../../context/GlobalState';
-import { User, Edit2, Trash2 } from 'lucide-react';
+import { User, Edit2, Trash2, Bell, Sun, Moon } from 'lucide-react';
 
 const MorePage = () => {
-  const { user, updateUser } = useContext(GlobalContext);
+  const { user, updateUser, theme, toggleTheme } = useContext(GlobalContext);
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState(user?.name || 'Guest');
   const [logoUrl, setLogoUrl] = useState(user?.logoUrl || '');
   const [logoError, setLogoError] = useState(false);
   const fileInputRef = useRef(null);
+  const isLight = theme === 'light';
 
   useEffect(() => {
     setName(user?.name || 'Guest');
@@ -95,7 +97,34 @@ const MorePage = () => {
         </div>
         <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '1rem 0' }} />
         <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelected} style={{ display: 'none' }} />
-
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+          <div className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', background: 'var(--bg-tertiary)' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(234, 179, 8, 0.18)', color: 'var(--accent-primary)' }}>
+              {isLight ? <Sun size={20} /> : <Moon size={20} />}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <span style={{ fontWeight: 700 }}>Appearance</span>
+              <small style={{ opacity: 0.75 }}>{isLight ? 'Light Mode' : 'Dark Mode'}</small>
+            </div>
+            <label className="toggle-switch" aria-label="Theme toggle" style={{ marginLeft: 'auto' }}>
+              <input
+                type="checkbox"
+                checked={isLight}
+                onChange={(e) => toggleTheme(e.target.checked ? 'light' : 'dark')}
+              />
+              <span className="toggle-slider"></span>
+            </label>
+          </div>
+          <Link to="/notifications" className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', background: 'var(--bg-tertiary)', textDecoration: 'none' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(99, 102, 241, 0.18)', color: 'var(--accent-primary)' }}>
+              <Bell size={20} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center' }}>
+              <span style={{ fontWeight: 700, color: 'var(--accent-primary)', textAlign: 'center' }}>Alerts</span>
+              <small style={{ opacity: 0.75, textAlign: 'center' }}>Manage notifications</small>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );
