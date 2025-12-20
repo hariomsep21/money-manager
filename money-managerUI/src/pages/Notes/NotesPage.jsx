@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
-import { Plus, Pencil, Trash, Check, X } from 'lucide-react';
+import { Plus, Pencil, Trash, Check, X, GripVertical } from 'lucide-react';
 import MonthYearSelector from '../../components/MonthYearSelector';
 
 const NotesPage = () => {
@@ -22,25 +22,33 @@ const NotesPage = () => {
     const [newNote, setNewNote] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [editingText, setEditingText] = useState('');
+    const [orderedNotes, setOrderedNotes] = useState(monthNotes);
+    const [dragIndex, setDragIndex] = useState(null);
+    const [overIndex, setOverIndex] = useState(null);
 
     useEffect(() => {
         // Reset add input when switching months
         setIsAdding(false);
         setNewNote('');
-    }, [noteKey]);
+        setOrderedNotes(monthNotes);
+        setDragIndex(null);
+        setOverIndex(null);
+    }, [noteKey, monthNotes.length]);
 
     const handleSaveNewNote = () => {
         const text = (newNote || '').trim();
         if (!text) return;
         const item = { id: `note-${Date.now()}`, text, createdAt: new Date().toISOString() };
-        const updated = [...monthNotes, item];
+        const updated = [...orderedNotes, item];
+        setOrderedNotes(updated);
         updateNote(noteKey, updated);
         setNewNote('');
         setIsAdding(false);
     };
 
     const handleDeleteNote = (id) => {
-        const updated = monthNotes.filter(n => n.id !== id);
+        const updated = orderedNotes.filter(n => n.id !== id);
+        setOrderedNotes(updated);
         updateNote(noteKey, updated);
         // If deleting the currently editing note, clear edit state
         if (editingId === id) {
@@ -57,7 +65,8 @@ const NotesPage = () => {
     const handleSaveEdit = () => {
         const text = (editingText || '').trim();
         if (!editingId) return;
-        const updated = monthNotes.map(n => n.id === editingId ? { ...n, text } : n);
+        const updated = orderedNotes.map(n => n.id === editingId ? { ...n, text } : n);
+        setOrderedNotes(updated);
         updateNote(noteKey, updated);
         setEditingId(null);
         setEditingText('');
@@ -72,13 +81,28 @@ const NotesPage = () => {
         setCurrentDate(d);
     };
 
+    // Drag & Drop handlers
+    const onDragStart = (index) => setDragIndex(index);
+    const onDragOver = (index, e) => { e.preventDefault(); setOverIndex(index); };
+    const onDrop = (index, e) => {
+        e.preventDefault();
+        if (dragIndex === null || dragIndex === index) { setDragIndex(null); setOverIndex(null); return; }
+        const next = [...orderedNotes];
+        const [moved] = next.splice(dragIndex, 1);
+        next.splice(index, 0, moved);
+        setOrderedNotes(next);
+        updateNote(noteKey, next);
+        setDragIndex(null);
+        setOverIndex(null);
+    };
+
     return (
         <div className="container" style={{ paddingBottom: '80px' }}>
 
             {/* Header: Shared Month-Year Selector */}
             <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
-            <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 12px 30px rgba(0,0,0,0.08)', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '1rem', fontWeight: 600 }}>Notes for {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                     <button className="icon-btn" aria-label="Add Note" title="Add Note" onClick={() => setIsAdding(true)}>
@@ -88,7 +112,7 @@ const NotesPage = () => {
 
                 {/* Add Note Input */}
                 {isAdding && (
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '0.5rem', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
                         <input
                             className="input-field"
                             value={newNote}
@@ -111,8 +135,21 @@ const NotesPage = () => {
                     {monthNotes.length === 0 && (
                         <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>No notes yet. Click + to add one.</div>
                     )}
-                    {monthNotes.map((n) => (
-                        <div key={n.id} style={{ border: '1px solid var(--border-color)', borderRadius: '10px', padding: '0.75rem' }}>
+                    {orderedNotes.map((n, index) => (
+                        <div
+                            key={n.id}
+                            draggable
+                            onDragStart={() => onDragStart(index)}
+                            onDragOver={(e) => onDragOver(index, e)}
+                            onDrop={(e) => onDrop(index, e)}
+                            style={{
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '10px',
+                                padding: '0.75rem',
+                                boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+                                background: overIndex === index ? 'var(--bg-tertiary)' : 'var(--bg-primary)'
+                            }}
+                        >
                             {editingId === n.id ? (
                                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                     <input
@@ -131,6 +168,9 @@ const NotesPage = () => {
                                 </div>
                             ) : (
                                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                       
+                                    </div>
                                     <div style={{ flex: 1 }}>
                                         <div style={{ fontSize: '0.95rem' }}>{n.text}</div>
                                         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
@@ -140,6 +180,15 @@ const NotesPage = () => {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <button className="icon-btn icon-action edit" aria-label="Edit" title="Edit" onClick={() => startEditNote(n)}><Pencil size={18} /></button>
                                         <button className="icon-btn icon-action delete" aria-label="Delete" title="Delete" onClick={() => handleDeleteNote(n.id)}><Trash size={18} /></button>
+                                                                                 <button
+                                                                                        type="button"
+                                                                                        className="icon-btn"
+                                                                                        aria-label="Drag to reorder"
+                                                                                        title="Hold and drag this note"
+                                                                                        style={{ cursor: 'grab', color: 'var(--text-secondary)' }}
+                                                                                    >
+                                                                                        <GripVertical size={18} />
+                                                                                    </button>
                                     </div>
                                 </div>
                             )}
