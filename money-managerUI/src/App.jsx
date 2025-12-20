@@ -7,8 +7,6 @@ import TransactionsPage from './pages/Transactions/TransactionsPage';
 import AddTransactionPage from './pages/Transactions/AddTransactionPage';
 import AnalyticsPage from './pages/Analytics/AnalyticsPage';
 import NotesPage from './pages/Notes/NotesPage';
-import ProfilePage from './pages/Profile/ProfilePage';
-import AccountsPage from './pages/Accounts/AccountsPage';
 import NotificationsPage from './pages/Notifications/NotificationsPage';
 import { InstallPWA } from './components/InstallPWA';
 import './App.css';
@@ -26,8 +24,8 @@ function AppContent() {
           <Route path="/add-transaction" element={<AddTransactionPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/notes" element={<NotesPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/accounts" element={<AccountsPage />} />
+          {/* Profile route removed */}
+          {/* Accounts section removed */}
           <Route path="/notifications" element={<NotificationsPage />} />
         </Routes>
       </div>

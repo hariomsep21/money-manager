@@ -4,12 +4,12 @@ import { Wallet, Bell, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const AccountsPage = () => {
-    const { currency, changeCurrency, theme, toggleTheme } = useContext(GlobalContext);
+    const { currency, changeCurrency } = useContext(GlobalContext);
     const navigate = useNavigate();
 
     return (
         <div className="container">
-            <h1 className="page-title">My Profile</h1>
+            <h1 className="page-title">Accounts</h1>
 
             <div className="glass-panel" style={{ padding: '0.5rem 1.5rem' }}>
                 {/* Currency Section */}

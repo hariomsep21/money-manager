@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt, User } from 'lucide-react';
+import { LayoutDashboard, Receipt, Bell } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -24,9 +24,9 @@ const Navbar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/profile" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <User size={20} />
-                            <span>Profile</span>
+                        <NavLink to="/notifications" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <Bell size={20} />
+                            <span>Notifications</span>
                         </NavLink>
                     </li>
                 </ul>
