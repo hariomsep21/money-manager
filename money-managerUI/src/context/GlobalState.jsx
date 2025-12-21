@@ -157,9 +157,14 @@ export const GlobalProvider = ({ children }) => {
             const initial = await loadInitialState();
             const notifList = await listNotifications();
             if (mounted) {
-                dispatch({ type: 'INIT_STATE', payload: initial });
+                // Map legacy theme names ('light'/'dark') to new ('orange'/'complementary')
+                const mappedTheme = initial.theme === 'light'
+                    ? 'orange'
+                    : (initial.theme === 'dark' ? 'complementary' : initial.theme);
+                const initialFixed = { ...initial, theme: mappedTheme };
+                dispatch({ type: 'INIT_STATE', payload: initialFixed });
                 dispatch({ type: 'SET_NOTIFICATIONS', payload: notifList });
-                document.body.setAttribute('data-theme', initial.theme);
+                document.body.setAttribute('data-theme', mappedTheme);
                 scheduleAll(notifList);
             }
         })();

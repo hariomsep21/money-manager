@@ -12,18 +12,19 @@
   --heading-color: #ffffff;
   --subheading-color: var(--text-secondary);
 
-  --accent-primary: #ff5252;
-  --accent-blue: #448aff;
-  --accent-green: #69f0ae;
-  --accent-red: #ff5252;
+  /* Brand accent (complementary theme default: indigo/blue) */
+  --accent-primary: #6366F1; /* indigo-500 */
+  --accent-blue: #3b82f6;   /* blue-500 */
+  --accent-green: #10b981;  /* emerald-500 */
+  --accent-red: #ef4444;    /* red-500 */
 
   --border-color: #333333;
 }
 
-[data-theme='light'] {
+[data-theme='orange'] {
   --bg-primary: #ffffff;
-  --bg-secondary: #f3f4f6;
-  --bg-tertiary: #e5e7eb;
+  --bg-secondary: #fff7ed;  /* orange-50 backdrop */
+  --bg-tertiary: #ffedd5;   /* orange-100 */
 
   --text-primary: #1f2937;
   --text-secondary: #4b5563;
@@ -33,8 +34,8 @@
   --heading-color: #000000;
   --subheading-color: var(--text-secondary);
 
-  --accent-primary: #ef4444;
-  /* Slightly darker red for visibility */
+  /* Orange brand accents */
+  --accent-primary: #f97316; /* orange-500 */
   --accent-blue: #3b82f6;
   --accent-green: #10b981;
   --accent-red: #ef4444;
@@ -54,6 +55,8 @@ body {
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  /* Responsive base font sizing */
+  font-size: clamp(14px, 1.2vw, 16px);
 }
 
 /* Global heading and subheading colors */
@@ -67,7 +70,7 @@ small {
 
 .container {
   width: 100%;
-  max-width: 600px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 1rem;
   padding-bottom: 80px;
@@ -79,12 +82,23 @@ small {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1rem;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.glass-panel.card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
 }
 
 .page-title {
   margin-bottom: 1rem;
   font-size: 1.5rem;
   color: var(--heading-color);
+}
+
+@media (min-width: 768px) {
+  .page-title { font-size: 1.75rem; }
 }
 
 /* Buttons */
@@ -211,6 +225,17 @@ button {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0.75rem;
   align-items: end;
+}
+
+/* Responsive grid utilities */
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+@media (min-width: 480px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 768px) {
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 .modal-field {}

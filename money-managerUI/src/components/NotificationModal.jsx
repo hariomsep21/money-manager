@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import SimpleTimePicker from './SimpleTimePicker';
-import { X } from 'lucide-react';
+import { X, Save as SaveIcon } from 'lucide-react';
 
 function formatTimeToHHMM(value) {
   if (!value) return '20:00';
@@ -117,8 +117,16 @@ export default function NotificationModal({
         </div>
 
         <div className="modal-actions">
-          <button className="btn btn-primary" style={{ background: 'var(--bg-tertiary)' }} onClick={onCancel}>Cancel</button>
-          <button className="btn btn-primary" style={{ background: 'var(--accent-primary)' }} onClick={handleSave}>Save</button>
+          <button
+            className="btn btn-primary"
+            aria-label="Save"
+            title="Save"
+            style={{ background: 'var(--accent-primary)',width:'18%' }}
+
+            onClick={handleSave}
+          >
+            <SaveIcon size={18} />
+          </button>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ const MorePage = () => {
   const [logoUrl, setLogoUrl] = useState(user?.logoUrl || '');
   const [logoError, setLogoError] = useState(false);
   const fileInputRef = useRef(null);
-  const isLight = theme === 'light';
+  const isOrange = theme === 'orange';
 
   useEffect(() => {
     setName(user?.name || 'Guest');
@@ -102,17 +102,17 @@ const MorePage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
           <div className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', boxShadow: '0 8px 22px rgba(0,0,0,0.12)', marginTop: '10px' }}>
             <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
-              {isLight ? <Sun size={20} /> : <Moon size={20} />}
+              {isOrange ? <Sun size={20} /> : <Moon size={20} />}
             </div>
             <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <span style={{ fontWeight: 700 }}>Appearance</span>
-              <small style={{ opacity: 0.75 }}>{isLight ? 'Light Mode' : 'Dark Mode'}</small>
+              <small style={{ opacity: 0.75 }}>{isOrange ? 'Orange Theme' : 'Complementary Theme'}</small>
             </div>
             <label className="toggle-switch" aria-label="Theme toggle" style={{ marginLeft: 'auto' }}>
               <input
                 type="checkbox"
-                checked={isLight}
-                onChange={(e) => toggleTheme(e.target.checked ? 'light' : 'dark')}
+                checked={isOrange}
+                onChange={(e) => toggleTheme(e.target.checked ? 'orange' : 'complementary')}
               />
               <span className="toggle-slider"></span>
             </label>

@@ -65,7 +65,7 @@ const AnalyticsPage = () => {
         <div className="container" style={{ paddingBottom: '80px' }}>
             <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+            <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
                 <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Income</p>
                     <h3 style={{ color: 'var(--accent-green)', fontSize: '1.5rem' }}>
