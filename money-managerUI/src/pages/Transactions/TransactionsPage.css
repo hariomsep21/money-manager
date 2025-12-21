@@ -1,0 +1,74 @@
+:root {}
+
+/* Scope everything under .transactions-page to avoid bleed */
+.transactions-page { padding-bottom: 96px; }
+
+/* Summary stats card */
+.transactions-page .stats-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.transactions-page .stat { text-align: center; }
+.transactions-page .stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.transactions-page .stat-value {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.transactions-page .stat-value.income { color: var(--accent-blue); }
+.transactions-page .stat-value.expense { color: var(--accent-orange); }
+.transactions-page .stat-value.total { color: var(--text-primary); }
+
+/* Search */
+.transactions-page .search-wrapper { margin: 0 0 1rem 0; }
+.transactions-page .search-input {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+}
+.transactions-page .search-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent-primary) 55%, var(--border-color));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+}
+
+/* Edit form spacing */
+.transactions-page .edit-form-wrapper { margin-bottom: 1rem; }
+
+/* Floating Action Button (page scoped) */
+.transactions-page .fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 90px; /* Keep above bottom nav */
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+  z-index: 110;
+}
+.transactions-page .fab:hover {
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--accent-primary) 35%, transparent);
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .transactions-page .stats-card {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+}

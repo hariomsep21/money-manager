@@ -124,7 +124,7 @@ const AnalyticsPage = () => {
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                             ))}
                                         </Pie>
-                                        <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
+                                        <Tooltip contentStyle={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} />
                                         <Legend />
                                     </PieChart>
                                 </ResponsiveContainer>
@@ -135,7 +135,7 @@ const AnalyticsPage = () => {
                                         <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                                         <XAxis dataKey="name" stroke="#666" />
                                         <YAxis stroke="#666" />
-                                        <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
+                                        <Tooltip contentStyle={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} />
                                         <Legend />
                                         <Bar dataKey="value" name="Expense">
                                             {sortedChartData.map((entry, index) => (

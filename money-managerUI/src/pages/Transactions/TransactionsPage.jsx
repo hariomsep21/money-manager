@@ -5,6 +5,7 @@ import TransactionList from './TransactionList';
 import TransactionForm from './TransactionForm';
 import { ChevronLeft, ChevronRight, ChevronDown, Plus } from 'lucide-react';
 import MonthYearSelector from '../../components/MonthYearSelector';
+import './TransactionsPage.css';
 
 const TransactionsPage = () => {
     const { transactions, currency } = useContext(GlobalContext);
@@ -43,58 +44,49 @@ const TransactionsPage = () => {
     };
 
     return (
-        <div className="container" style={{ paddingBottom: '80px' }}>
+        <div className="container transactions-page">
             {/* Header: Shared Month-Year Selector */}
             <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
-            {/* Summary Stats Code */}
-            <div className="glass-panel" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', padding: '1.5rem 1rem' }}>
-                <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Income</p>
-                    <p style={{ color: 'var(--accent-blue)', fontWeight: '600' }}>
+            {/* Summary Stats */}
+            <div className="glass-panel stats-card">
+                <div className="stat">
+                    <span className="stat-label">Income</span>
+                    <span className="stat-value income">
                         {currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : currency === 'JPY' ? '¥' : '$'}
                         {income.toFixed(2)}
-                    </p>
+                    </span>
                 </div>
-                <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Expenses</p>
-                    <p style={{ color: 'var(--accent-orange)', fontWeight: '600' }}>
+                <div className="stat">
+                    <span className="stat-label">Expenses</span>
+                    <span className="stat-value expense">
                         {currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : currency === 'JPY' ? '¥' : '$'}
                         {expense.toFixed(2)}
-                    </p>
+                    </span>
                 </div>
-                <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Total</p>
-                    <p style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
+                <div className="stat">
+                    <span className="stat-label">Total</span>
+                    <span className="stat-value total">
                         {currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : currency === 'JPY' ? '¥' : '$'}
                         {total.toFixed(2)}
-                    </p>
+                    </span>
                 </div>
             </div>
 
             {/* Search Bar */}
-            <div style={{ marginBottom: '1rem' }}>
+            <div className="search-wrapper">
                 <input
                     type="text"
                     placeholder="Search transactions..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="input-field"
-                    style={{
-                        width: '100%',
-                        padding: '0.8rem 1rem',
-                        borderRadius: '12px',
-                        border: '1px solid var(--border-color)',
-                        background: 'var(--bg-primary)',
-                        color: 'var(--text-primary)',
-                        fontSize: '0.9rem'
-                    }}
+                    className="input-field search-input"
                 />
             </div>
 
             {/* Editing Form (Conditional) */}
             {editingTransaction && (
-                <div style={{ marginBottom: '2rem' }}>
+                <div className="edit-form-wrapper">
                     <TransactionForm
                         transactionToEdit={editingTransaction}
                         clearEdit={clearEdit}
@@ -106,27 +98,13 @@ const TransactionsPage = () => {
             {/* Transactions List */}
             <TransactionList transactions={filteredTransactions} onEdit={setEditingTransaction} />
 
-
             {/* Floating Add Button */}
             <button
-                className="btn-primary"
+                className="btn-primary fab"
                 onClick={() => navigate('/add-transaction')}
-                style={{
-                    position: 'fixed',
-                    bottom: '100px',
-                    right: '2rem',
-                    borderRadius: '50%',
-                    width: '60px',
-                    height: '60px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 12px rgba(124, 58, 237, 0.4)',
-                    padding: 0,
-                    zIndex: 100
-                }}
+                aria-label="Add transaction"
             >
-                <Plus size={32} />
+                <Plus size={28} />
             </button>
         </div>
     );

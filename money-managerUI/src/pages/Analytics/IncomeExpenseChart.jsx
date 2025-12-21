@@ -18,8 +18,8 @@ const IncomeExpenseChart = ({ data }) => {
                     <XAxis dataKey="name" stroke="#94a3b8" />
                     <YAxis stroke="#94a3b8" />
                     <Tooltip
-                        contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', color: '#f8fafc' }}
-                        itemStyle={{ color: '#f8fafc' }}
+                        contentStyle={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+                        itemStyle={{ color: 'var(--text-primary)' }}
                     />
                     <Legend />
                     <Bar dataKey="income" name="Income" fill="#10b981" radius={[4, 4, 0, 0]} />
