@@ -86,6 +86,10 @@ small {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+.glass-panel:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
 .glass-panel.card-interactive:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
@@ -114,7 +118,7 @@ button {
   padding: 0.75rem 1.5rem;
   border-radius: 50px;
   font-weight: 600;
-  transition: opacity 0.2s;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
 }
 
 .btn-link {
@@ -122,6 +126,15 @@ button {
   color: var(--accent-blue);
   padding: 0;
   text-decoration: underline;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--accent-primary) 18%, transparent);
 }
 
 .icon-btn {
@@ -132,6 +145,26 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease, color 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+.icon-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
+/* Persistent background variant for action icons */
+.icon-btn.icon-chip {
+  background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+}
+.icon-btn.icon-chip:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
 /* Action icon styling and hover feedback */
@@ -177,6 +210,7 @@ button {
   border-radius: 999px;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
+.toggle-slider:hover { filter: brightness(1.05); }
 .toggle-slider::before {
   content: "";
   position: absolute;
@@ -296,6 +330,29 @@ button {
 .accent-soft {
   background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
 }
+.accent-soft:hover { background: color-mix(in srgb, var(--accent-primary) 26%, transparent); }
+
+/* Note cards */
+.note-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: var(--bg-primary);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease, border-color 0.2s ease;
+}
+.note-card:hover {
+  background: var(--bg-tertiary);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent-primary) 35%, var(--border-color));
+}
+.note-card:focus-within {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary) 35%, transparent), 0 10px 24px rgba(0,0,0,0.12);
+}
+.accent-soft:hover { background: color-mix(in srgb, var(--accent-primary) 26%, transparent); }
 
 /* Global dropdown list item color */
 select option,

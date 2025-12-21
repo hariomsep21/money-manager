@@ -105,8 +105,15 @@ const NotesPage = () => {
             <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 12px 30px rgba(0,0,0,0.08)', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '1rem', fontWeight: 600 }}>Notes for {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                    <button className="icon-btn" aria-label="Add Note" title="Add Note" onClick={() => setIsAdding(true)}>
-                        <Plus size={22} />
+                    <button
+                        className="btn btn-primary"
+                        aria-label="Add Note"
+                        title="Add Note"
+                        style={{ background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                        onClick={() => setIsAdding(true)}
+                    >
+                        <Plus size={18} />
+                        <span>Add Note</span>
                     </button>
                 </div>
 
@@ -142,11 +149,8 @@ const NotesPage = () => {
                             onDragStart={() => onDragStart(index)}
                             onDragOver={(e) => onDragOver(index, e)}
                             onDrop={(e) => onDrop(index, e)}
+                            className="note-card"
                             style={{
-                                border: '1px solid var(--border-color)',
-                                borderRadius: '10px',
-                                padding: '0.75rem',
-                                boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
                                 background: overIndex === index ? 'var(--bg-tertiary)' : 'var(--bg-primary)'
                             }}
                         >
@@ -178,11 +182,11 @@ const NotesPage = () => {
                                         </div>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <button className="icon-btn icon-action edit" aria-label="Edit" title="Edit" onClick={() => startEditNote(n)}><Pencil size={18} /></button>
-                                        <button className="icon-btn icon-action delete" aria-label="Delete" title="Delete" onClick={() => handleDeleteNote(n.id)}><Trash size={18} /></button>
+                                        <button className="icon-btn icon-action edit icon-chip" aria-label="Edit" title="Edit" onClick={() => startEditNote(n)}><Pencil size={18} /></button>
+                                            <button className="icon-btn icon-action delete icon-chip" aria-label="Delete" title="Delete" onClick={() => handleDeleteNote(n.id)}><Trash size={18} /></button>
                                                                                  <button
                                                                                         type="button"
-                                                                                        className="icon-btn"
+                                                                                        className="icon-btn icon-chip"
                                                                                         aria-label="Drag to reorder"
                                                                                         title="Hold and drag this note"
                                                                                         style={{ cursor: 'grab', color: 'var(--text-secondary)' }}
