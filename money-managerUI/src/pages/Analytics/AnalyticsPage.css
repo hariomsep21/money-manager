@@ -1,0 +1,23 @@
+.analytics-page {
+    padding-bottom: 80px;
+}
+
+.summary-cards-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Force specific stacking behavior requested by user */
+@media (max-width: 600px) {
+    .summary-cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .summary-cards-grid {
+        gap: 0.75rem;
+    }
+}

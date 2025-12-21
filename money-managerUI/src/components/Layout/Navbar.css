@@ -1,18 +1,20 @@
 .navbar {
     position: sticky;
-    top: 1rem;
-    margin: 1rem auto;
+    top: 0.75rem;
+    margin: 0.5rem auto 1rem;
     z-index: 100;
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 0.75rem;
 }
 
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 0.9rem 1.5rem;
     width: 100%;
+    gap: 1rem;
 }
 
 .logo {
@@ -24,14 +26,14 @@
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: clamp(1rem, 2vw, 2rem);
 }
 
 .nav-links a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.9rem;
     color: var(--text-secondary);
     font-weight: 500;
     transition: all 0.3s ease;
@@ -49,12 +51,32 @@
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
 }
 
+@media (max-width: 1024px) {
+    .navbar {
+        max-width: 100%;
+    }
+
+    .nav-container {
+        padding: 0.85rem 1.1rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .navbar {
+        position: static;
+        padding: 0 0.35rem;
+    }
+
     .nav-links span {
         display: none;
     }
 
     .nav-links {
-        gap: 1rem;
+        gap: 0.75rem;
+    }
+
+    .nav-links a {
+        padding: 0.4rem 0.65rem;
+        border-radius: 10px;
     }
 }

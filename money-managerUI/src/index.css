@@ -20,6 +20,7 @@
   --accent-red: #ef4444;    /* red-500 */
 
   --border-color: #333333;
+  --radius-md: 10px;
 }
 
 [data-theme='orange'] {
@@ -72,7 +73,7 @@ small {
 
 .container {
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 1rem;
   padding-bottom: 80px;
@@ -129,7 +130,6 @@ button {
   padding: 0;
   text-decoration: underline;
 }
-
 .btn-primary:hover {
   box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-primary) 25%, transparent);
   transform: translateY(-1px);
@@ -138,11 +138,12 @@ button {
   transform: translateY(0);
   box-shadow: 0 6px 14px color-mix(in srgb, var(--accent-primary) 18%, transparent);
 }
-
 .icon-btn {
   background: transparent;
   color: var(--text-secondary);
   padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -267,7 +268,7 @@ button {
 .grid { display: grid; gap: 1rem; }
 .grid-2 { grid-template-columns: 1fr; }
 .grid-3 { grid-template-columns: 1fr; }
-@media (min-width: 480px) {
+@media (min-width: 600px) {
   .grid-2 { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 768px) {

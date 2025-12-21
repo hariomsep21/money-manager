@@ -1,42 +1,46 @@
 #root {
-  max-width: 1280px;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-secondary);
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+}
+
+.content-wrapper {
+  flex: 1;
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Utility spacing for pages that already add bottom padding (e.g. fab) */
+.with-bottom-nav-offset {
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Simple responsive grid helper */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    max-width: 100%;
+    padding: clamp(0.75rem, 3vw, 1.25rem);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (max-width: 540px) {
+  .content-wrapper {
+    padding: clamp(0.65rem, 4vw, 1rem);
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

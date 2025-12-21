@@ -3,6 +3,7 @@ import { GlobalContext } from '../../context/GlobalState';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis, BarChart, Bar, CartesianGrid } from 'recharts';
 import { PieChart as PieIcon, BarChart3 } from 'lucide-react';
 import MonthYearSelector from '../../components/MonthYearSelector';
+import './AnalyticsPage.css';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF5252', '#448AFF'];
 
@@ -30,7 +31,7 @@ const AnalyticsPage = () => {
         acc[cat] += Math.abs(t.amount);
         return acc;
     }, {});
-    
+
     // Prepare and sort chart data descending by expense amount
     const preferredOrder = ['Health', 'Food', 'Other'];
     const sortedChartData = Object.keys(categoryData)
@@ -62,10 +63,10 @@ const AnalyticsPage = () => {
     const handleDateChange = (d) => setCurrentDate(d);
 
     return (
-        <div className="container" style={{ paddingBottom: '80px' }}>
+        <div className="container analytics-page">
             <MonthYearSelector value={currentDate} onChange={handleDateChange} />
 
-            <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
+            <div className="summary-cards-grid" style={{ marginBottom: '2rem' }}>
                 <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Income</p>
                     <h3 style={{ color: 'var(--accent-blue)', fontSize: '1.5rem' }}>

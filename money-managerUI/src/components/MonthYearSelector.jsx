@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import './MonthYearSelector.css';
 
 /**
  * MonthYearSelector
@@ -55,20 +56,23 @@ const MonthYearSelector = ({
   const months = Array.from({ length: 12 }, (_, i) => i);
 
   return (
-    <div className={className} style={{ marginBottom: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className={`month-year-selector ${className || ''}`}>
+      <div className="month-year-header">
         <button className="icon-btn" aria-label="Previous month" onClick={prevMonth}>
           <ChevronLeft size={24} />
         </button>
         <div
           onClick={showDropdownOnLabelClick ? () => setShowDatePicker((v) => !v) : undefined}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: showDropdownOnLabelClick ? 'pointer' : 'default' }}
+          className={`month-label ${showDropdownOnLabelClick ? 'clickable' : ''}`}
           aria-label={`Selected ${value.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
         >
-          <h2 style={{ fontSize: '1.2rem' }}>
+          <h2 className="month-text">
             {value.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
           </h2>
-          <ChevronDown size={16} style={{ opacity: 0.7 }} />
+          <ChevronDown 
+            size={16} 
+            className={`dropdown-indicator ${showDatePicker ? 'open' : ''}`}
+          />
         </div>
         <button className="icon-btn" aria-label="Next month" onClick={nextMonth}>
           <ChevronRight size={24} />
@@ -76,12 +80,11 @@ const MonthYearSelector = ({
       </div>
 
       {showDatePicker && (
-        <div className="glass-panel" style={{ marginTop: '1rem', padding: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+        <div className="glass-panel month-year-dropdown">
           <select
-            className="input-field"
+            className="input-field dropdown-select"
             value={value.getFullYear()}
             onChange={handleYearChange}
-            style={{ width: 'auto' }}
             aria-label="Select year"
           >
             {years.map((year) => (
@@ -91,10 +94,9 @@ const MonthYearSelector = ({
             ))}
           </select>
           <select
-            className="input-field"
+            className="input-field dropdown-select"
             value={value.getMonth()}
             onChange={handleMonthChange}
-            style={{ width: 'auto' }}
             aria-label="Select month"
           >
             {months.map((month) => (
