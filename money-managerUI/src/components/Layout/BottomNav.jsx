@@ -20,7 +20,7 @@ const BottomNav = () => {
             </NavLink>
             <NavLink to="/more" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <User size={24} />
-                <span>More</span>
+                <span>My Profile</span>
             </NavLink>
         </nav>
     );

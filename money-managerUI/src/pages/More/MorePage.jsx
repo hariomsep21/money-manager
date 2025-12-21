@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../../context/GlobalState';
-import { User, Bell, Sun, Moon } from 'lucide-react';
+import { User, Bell, Sun, Moon, Banknote } from 'lucide-react';
 
 const MorePage = () => {
-  const { user, updateUser, theme, toggleTheme } = useContext(GlobalContext);
+  const { user, updateUser, theme, toggleTheme, currency, changeCurrency } = useContext(GlobalContext);
   const [name, setName] = useState(user?.name || 'Guest');
   const [editingName, setEditingName] = useState(false);
   const [logoUrl, setLogoUrl] = useState(user?.logoUrl || '');
@@ -116,6 +116,39 @@ const MorePage = () => {
               />
               <span className="toggle-slider"></span>
             </label>
+          </div>
+
+          {/* Currency selection (single-row card) */}
+          <div className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', boxShadow: '0 8px 22px rgba(0,0,0,0.12)', marginTop: '10px' }}>
+            <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
+              <Banknote size={20} />
+            </div>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <span style={{ fontWeight: 700, color: 'var(--heading-color)' }}>Currency</span>
+              <small style={{ opacity: 0.75 }}>Select your preferred currency</small>
+            </div>
+            <select
+              className="input-field currency-select"
+              value={currency}
+              onChange={(e) => changeCurrency(e.target.value)}
+              aria-label="Select currency"
+              style={{
+                padding: '0.4rem 0.6rem',
+                borderRadius: 10,
+                border: '1px solid var(--border-color)',
+                background: 'var(--bg-primary)',
+                color: 'var(--text-primary)',
+                fontWeight: 600,
+                width: 'auto',
+                minWidth: '150px'
+              }}
+            >
+              <option value="INR">INR ₹</option>
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+              <option value="GBP">GBP £</option>
+              <option value="JPY">JPY ¥</option>
+            </select>
           </div>
           <Link to="/notifications" className="nav-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.9rem 1rem', borderRadius: '14px', border: '1px solid var(--border-color)', textDecoration: 'none', boxShadow: '0 8px 22px rgba(0,0,0,0.12)', marginTop: '10px' }}>
             <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>

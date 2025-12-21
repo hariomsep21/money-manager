@@ -363,3 +363,16 @@ select optgroup,
 .input-field optgroup {
   color: #000; /* Ensure dropdown items render in black across themes */
 }
+
+/* Scoped override: Currency dropdown should be readable in dark theme */
+/* The app sets body[data-theme] to 'orange' (light) or 'complementary' (dark). */
+[data-theme='complementary'] .currency-select option {
+  color: #fff; /* white text on dark backgrounds */
+  background: var(--bg-primary);
+}
+
+/* Ensure specificity beats the global rule for this select in all themes */
+.currency-select.input-field option,
+.input-field.currency-select option {
+  color: var(--text-primary);
+}

@@ -169,7 +169,7 @@ export async function loadInitialState() {
   }
   let user;
   try { user = JSON.parse(getSetting('user', JSON.stringify({ name: 'Guest' })))} catch { user = { name: 'Guest' }; }
-  const currency = getSetting('currency', 'USD');
+  const currency = getSetting('currency', 'INR');
   const theme = getSetting('theme', 'dark');
 
   return { transactions, user, currency, theme, notes };

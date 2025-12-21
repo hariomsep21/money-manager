@@ -20,7 +20,7 @@ import {
 const initialState = {
     transactions: [],
     user: { name: 'Guest' },
-    currency: 'USD',
+    currency: 'INR',
     theme: 'dark',
     notes: {},
     notifications: []

@@ -38,7 +38,7 @@ const Navbar = () => {
                     <li>
                         <NavLink to="/more" className={({ isActive }) => isActive ? 'active' : ''}>
                             <User size={20} />
-                            <span>More</span>
+                            <span>My Profile</span>
                         </NavLink>
                     </li>
                 </ul>
