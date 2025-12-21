@@ -68,7 +68,7 @@ const AnalyticsPage = () => {
             <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
                 <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Income</p>
-                    <h3 style={{ color: 'var(--accent-green)', fontSize: '1.5rem' }}>
+                    <h3 style={{ color: 'var(--accent-blue)', fontSize: '1.5rem' }}>
                         {currency === 'USD' ? '$' :
                             currency === 'EUR' ? '€' :
                                 currency === 'GBP' ? '£' :
@@ -79,7 +79,7 @@ const AnalyticsPage = () => {
                 </div>
                 <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Expense</p>
-                    <h3 style={{ color: 'var(--accent-red)', fontSize: '1.5rem' }}>
+                    <h3 style={{ color: 'var(--accent-orange)', fontSize: '1.5rem' }}>
                         {currency === 'USD' ? '$' :
                             currency === 'EUR' ? '€' :
                                 currency === 'GBP' ? '£' :

@@ -58,7 +58,7 @@ const TransactionsPage = () => {
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Expenses</p>
-                    <p style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>
+                    <p style={{ color: 'var(--accent-orange)', fontWeight: '600' }}>
                         {currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : currency === 'JPY' ? '¥' : '$'}
                         {expense.toFixed(2)}
                     </p>
