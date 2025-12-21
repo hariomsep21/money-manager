@@ -47,11 +47,11 @@
 }
 
 .income-text {
-    color: var(--accent-blue);
+    color: #3b82f6;
 }
 
 .expense-text {
-    color: var(--accent-primary);
+    color: #f97316;
 }
 
 /* Empty state for transactions list */
@@ -120,11 +120,11 @@
 }
 
 .transaction-amount .income {
-    color: var(--accent-blue);
+    color: #3b82f6;
 }
 
 .transaction-amount .expense {
-    color: var(--accent-primary);
+    color: #f97316;
 }
 
 /* Responsive Styles */

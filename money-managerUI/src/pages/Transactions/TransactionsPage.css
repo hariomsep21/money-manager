@@ -23,8 +23,8 @@
   font-weight: 700;
   letter-spacing: 0.2px;
 }
-.transactions-page .stat-value.income { color: var(--accent-blue); }
-.transactions-page .stat-value.expense { color: var(--accent-orange); }
+.transactions-page .stat-value.income { color: #3b82f6; }
+.transactions-page .stat-value.expense { color: #f97316; }
 .transactions-page .stat-value.total { color: var(--text-primary); }
 
 /* Search */
