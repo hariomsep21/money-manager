@@ -104,9 +104,9 @@ const MorePage = () => {
             <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
               {isOrange ? <Sun size={20} /> : <Moon size={20} />}
             </div>
-            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <span style={{ fontWeight: 700 }}>Appearance</span>
-              <small style={{ opacity: 0.75 }}>{isOrange ? 'Orange Theme' : 'Complementary Theme'}</small>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1,alignItems:'flex-start',paddingLeft:'20px' }}>
+              <span style={{ fontWeight: 700, fontSize: '0.95rem', lineHeight: 1.4 }}>Appearance</span>
+              <small style={{ opacity: 0.75, fontSize: '0.85rem', lineHeight: 1.3 }}>{isOrange ? 'Orange Theme' : 'Complementary Theme'}</small>
             </div>
             <label className="toggle-switch" aria-label="Theme toggle" style={{ marginLeft: 'auto' }}>
               <input
@@ -123,9 +123,9 @@ const MorePage = () => {
             <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
               <Banknote size={20} />
             </div>
-            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <span style={{ fontWeight: 700, color: 'var(--heading-color)' }}>Currency</span>
-              <small style={{ opacity: 0.75 }}>Select your preferred currency</small>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1,alignItems:'flex-start',paddingLeft:'20px' }}>
+              <span style={{ fontWeight: 700, color: 'var(--heading-color)', fontSize: '0.95rem', lineHeight: 1.4 }}>Currency</span>
+              <small style={{ opacity: 0.75, fontSize: '0.85rem', lineHeight: 1.3 }}>Select your preferred currency</small>
             </div>
             <select
               className="input-field currency-select"
@@ -154,9 +154,9 @@ const MorePage = () => {
             <div className="accent-soft" style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
               <Bell size={20} />
             </div>
-            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center' }}>
-              <span style={{ fontWeight: 700, color: 'var(--heading-color)', textAlign: 'center' }}>Alerts</span>
-              <small style={{ opacity: 0.75, textAlign: 'center' }}>Manage notifications</small>
+            <div className="nav-text" style={{ display: 'flex', flexDirection: 'column', flex: 1 ,alignItems:'flex-start',paddingLeft:'20px' }}>
+              <span style={{ fontWeight: 700, color: 'var(--heading-color)', fontSize: '0.95rem', lineHeight: 1.4 }}>Alerts</span>
+              <small style={{ opacity: 0.75, fontSize: '0.85rem', lineHeight: 1.3 }}>Manage notifications</small>
             </div>
           </Link>
         </div>
