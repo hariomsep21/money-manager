@@ -68,7 +68,7 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     margin-bottom: 0.75rem;
-    background: white;
+    background:var(--bg-primary);
     transition: transform 0.2s, border-color 0.2s;
 }
 
