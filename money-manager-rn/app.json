@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "FinTrack",
+    "slug": "fintrack-money-manager",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTabletMode": true
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "plugins": [
+      "expo-notifications",
+      "expo-asset",
+      "expo-sqlite"
+    ]
+  }
+}

@@ -33,14 +33,6 @@ export function InstallPWA() {
     }
 
     return (
-        <button
-            className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-green-700 transition-colors z-50 cursor-pointer"
-            onClick={onClick}
-            id="pwa-install-btn"
-            aria-label="Install App"
-        >
-            <Download size={20} />
-            <span>Install App</span>
-        </button>
+       <></>
     );
 }
