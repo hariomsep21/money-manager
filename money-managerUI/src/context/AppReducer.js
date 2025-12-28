@@ -59,14 +59,18 @@ export default (state, action) => {
         ...state,
         theme: action.payload
       };
-    case 'UPDATE_NOTE':
+    case 'UPDATE_NOTE': {
+      const value = Object.prototype.hasOwnProperty.call(action.payload, 'value')
+        ? action.payload.value
+        : action.payload.text;
       return {
         ...state,
         notes: {
           ...state.notes,
-          [action.payload.monthYear]: action.payload.text
-        }
+          [action.payload.monthYear]: value,
+        },
       };
+    }
     default:
       return state;
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalState';
+import { NotesProvider } from './notes/NotesContext';
 import BottomNav from './components/Layout/BottomNav';
 import LandingPage from './pages/Landing/LandingPage';
 import TransactionsPage from './pages/Transactions/TransactionsPage';
@@ -41,9 +42,11 @@ function AppContent() {
 function App() {
   return (
     <GlobalProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <NotesProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </NotesProvider>
     </GlobalProvider>
   );
 }

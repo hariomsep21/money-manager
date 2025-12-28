@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { GlobalContext } from '../../context/GlobalState';
+import { NotesContext, formatMonthYear } from '../../notes/NotesContext';
 import { Plus, Pencil, Trash, Check, X, GripVertical } from 'lucide-react';
 import MonthYearSelector from '../../components/MonthYearSelector';
 
 const NotesPage = () => {
-    const { notes, updateNote } = useContext(GlobalContext);
+    const { notes, updateNotes } = useContext(NotesContext);
     const [currentDate, setCurrentDate] = useState(new Date());
 
     // Helper for Notes Key
@@ -12,11 +12,8 @@ const NotesPage = () => {
     const noteKey = getMonthYearKey(currentDate);
 
     // Notes list for selected month
-    const monthNotes = Array.isArray(notes[noteKey])
-        ? notes[noteKey]
-        : (typeof notes[noteKey] === 'string' && notes[noteKey].trim())
-            ? [{ id: `legacy-${noteKey}`, text: notes[noteKey], createdAt: new Date().toISOString() }]
-            : [];
+    const monthRaw = notes[noteKey];
+    const monthNotes = Array.isArray(monthRaw) ? monthRaw : [];
 
     const [isAdding, setIsAdding] = useState(false);
     const [newNote, setNewNote] = useState('');
@@ -33,6 +30,7 @@ const NotesPage = () => {
         setOrderedNotes(monthNotes);
         setDragIndex(null);
         setOverIndex(null);
+        // Reset any legacy or malformed data gracefully handled by provider
     }, [noteKey, monthNotes.length]);
 
     const handleSaveNewNote = () => {
@@ -41,7 +39,7 @@ const NotesPage = () => {
         const item = { id: `note-${Date.now()}`, text, createdAt: new Date().toISOString() };
         const updated = [...orderedNotes, item];
         setOrderedNotes(updated);
-        updateNote(noteKey, updated);
+        updateNotes(noteKey, updated);
         setNewNote('');
         setIsAdding(false);
     };
@@ -49,7 +47,7 @@ const NotesPage = () => {
     const handleDeleteNote = (id) => {
         const updated = orderedNotes.filter(n => n.id !== id);
         setOrderedNotes(updated);
-        updateNote(noteKey, updated);
+        updateNotes(noteKey, updated);
         // If deleting the currently editing note, clear edit state
         if (editingId === id) {
             setEditingId(null);
@@ -67,7 +65,7 @@ const NotesPage = () => {
         if (!editingId) return;
         const updated = orderedNotes.map(n => n.id === editingId ? { ...n, text } : n);
         setOrderedNotes(updated);
-        updateNote(noteKey, updated);
+        updateNotes(noteKey, updated);
         setEditingId(null);
         setEditingText('');
     };
@@ -104,17 +102,7 @@ const NotesPage = () => {
 
             <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 12px 30px rgba(0,0,0,0.08)', borderRadius: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: 600 }}>Notes for {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                    <button
-                        className="btn btn-primary"
-                        aria-label="Add Note"
-                        title="Add Note"
-                        style={{ background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                        onClick={() => setIsAdding(true)}
-                    >
-                        <Plus size={18} />
-                        <span>Add Note</span>
-                    </button>
+                    <span style={{ fontSize: '1rem', fontWeight: 600 }}>Notes for {formatMonthYear(noteKey)}</span>
                 </div>
 
                 {/* Add Note Input */}
@@ -200,6 +188,29 @@ const NotesPage = () => {
                     ))}
                 </div>
             </div>
+            {/* Floating Add Button */}
+            <button
+                className="icon-btn"
+                aria-label="Add Note"
+                title="Add Note"
+                onClick={() => setIsAdding(true)}
+                style={{
+                    position: 'fixed',
+                    right: '20px',
+                    bottom: '80px',
+                    borderRadius: '50%',
+                    width: '56px',
+                    height: '56px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'var(--accent-primary)',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+                    color: '#fff'
+                }}
+            >
+                <Plus size={24} />
+            </button>
         </div>
     );
 };

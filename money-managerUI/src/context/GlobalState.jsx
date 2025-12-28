@@ -70,14 +70,21 @@ export const GlobalProvider = ({ children }) => {
         });
     }
 
-    function updateNote(monthYear, text) {
-        const actionPayload = { monthYear, text };
-        if (!text || (typeof text === 'string' && text.length === 0)) {
-            deleteNote(monthYear).then(() => {
-                dispatch({ type: 'UPDATE_NOTE', payload: { monthYear, text: '' } });
-            });
+    function updateNote(monthYear, value) {
+        const actionPayload = { monthYear, value };
+        if (!value || (typeof value === 'string' && value.length === 0)) {
+            // Only delete explicit empty string notes; arrays (even empty) should be persisted
+            if (typeof value === 'string') {
+                deleteNote(monthYear).then(() => {
+                    dispatch({ type: 'UPDATE_NOTE', payload: { monthYear, value: '' } });
+                });
+            } else {
+                setNote(monthYear, value).then(() => {
+                    dispatch({ type: 'UPDATE_NOTE', payload: actionPayload });
+                });
+            }
         } else {
-            setNote(monthYear, text).then(() => {
+            setNote(monthYear, value).then(() => {
                 dispatch({ type: 'UPDATE_NOTE', payload: actionPayload });
             });
         }

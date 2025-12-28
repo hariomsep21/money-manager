@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GlobalProvider, GlobalContext } from './context/GlobalState';
+import { NotesProvider } from './notes/NotesContext';
 import { ThemeProvider, useTheme } from './theme/ThemeContext';
 import Navigation from './navigation/Navigation';
 
@@ -43,7 +44,9 @@ function AppContent() {
 export default function App() {
   return (
     <GlobalProvider>
-      <AppContent />
+      <NotesProvider>
+        <AppContent />
+      </NotesProvider>
     </GlobalProvider>
   );
 }
