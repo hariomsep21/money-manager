@@ -14,9 +14,11 @@ import AnalyticsPage from '../pages/Analytics/AnalyticsPage';
 import NotesPage from '../pages/Notes/NotesPage';
 import NotificationsPage from '../pages/Notifications/NotificationsPage';
 import MorePage from '../pages/More/MorePage';
+import AboutPage from '../pages/More/AboutPage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const MoreStack = createNativeStackNavigator();
 
 function TransactionsStack() {
   const { colors } = useTheme();
@@ -36,6 +38,38 @@ function TransactionsStack() {
       <Stack.Screen name="TransactionsList" component={TransactionsPage} />
       <Stack.Screen name="AddTransaction" component={AddTransactionPage} />
     </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  const { colors } = useTheme();
+
+  return (
+    <MoreStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.bgTertiary,
+        },
+        headerTintColor: colors.textPrimary,
+        headerTitleStyle: {
+          fontWeight: '600',
+        },
+        contentStyle: {
+          backgroundColor: colors.bgPrimary,
+        },
+      }}
+    >
+      <MoreStack.Screen
+        name="MoreHome"
+        component={MorePage}
+        options={{ headerShown: false }}
+      />
+      <MoreStack.Screen
+        name="About"
+        component={AboutPage}
+        options={{ title: 'About' }}
+      />
+    </MoreStack.Navigator>
   );
 }
 
@@ -93,7 +127,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={MorePage}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (

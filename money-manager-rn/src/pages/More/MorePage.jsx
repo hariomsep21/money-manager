@@ -228,17 +228,17 @@ const MorePage = ({ navigation }) => {
         <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
           About
         </Text>
-        <View style={[styles.aboutBox, { backgroundColor: colors.bgTertiary }]}>
-          <Text style={[styles.appName, { color: colors.textPrimary }]}>
-            FinTrack
+        <TouchableOpacity
+          style={[styles.settingRow, { backgroundColor: colors.bgTertiary }]}
+          onPress={() => navigation.navigate('About')}
+        >
+          <Text style={[styles.settingLabel, { color: colors.textPrimary }]}>
+            About
           </Text>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>
-            Version 1.0.0
+          <Text style={[styles.settingValue, { color: colors.textSecondary }]}>
+            {'>'}
           </Text>
-          <Text style={[styles.appDescription, { color: colors.textMuted }]}>
-            Your personal money manager for tracking finances smartly
-          </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
