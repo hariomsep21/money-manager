@@ -9,6 +9,7 @@ import {
   Switch,
   FlatList,
   Modal,
+  TextInput,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeContext';
@@ -231,7 +232,7 @@ const NotificationsPage = ({ navigation }) => {
               />
             </View>
 
-            {/* Message Display */}
+            {/* Message Input */}
             <View>
               <Text style={[styles.label, { color: colors.textPrimary }]}>
                 Message
@@ -245,9 +246,14 @@ const NotificationsPage = ({ navigation }) => {
                   },
                 ]}
               >
-                <Text style={{ color: colors.textPrimary }}>
-                  {formData.message}
-                </Text>
+                <TextInput
+                  value={formData.message}
+                  onChangeText={(message) => setFormData({ ...formData, message })}
+                  placeholder="Enter notification message"
+                  placeholderTextColor={colors.textMuted}
+                  style={{ color: colors.textPrimary, flex: 1 }}
+                  multiline
+                />
               </View>
             </View>
 

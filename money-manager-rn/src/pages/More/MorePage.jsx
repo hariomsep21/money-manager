@@ -22,16 +22,24 @@ const MorePage = ({ navigation }) => {
 
   const pickImage = async () => {
     try {
+      // Ensure media library permissions (some platforms require this prior to picking)
+      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (perm.status !== 'granted') {
+        Alert.alert('Permission required', 'Please allow photo library access to set a profile image.');
+        return;
+      }
+
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaType.Images,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets[0]) {
-        setLogoUrl(result.assets[0].uri);
-        updateUser({ name, logoUrl: result.assets[0].uri });
+      if (!result.canceled && result.assets && result.assets[0]) {
+        const uri = result.assets[0].uri;
+        setLogoUrl(uri);
+        updateUser({ name, logoUrl: uri });
       }
     } catch (e) {
       Alert.alert('Error', 'Failed to pick image');
