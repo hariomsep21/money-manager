@@ -1,8 +1,25 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GlobalProvider, GlobalContext } from './context/GlobalState';
-import { ThemeProvider } from './theme/ThemeContext';
+import { ThemeProvider, useTheme } from './theme/ThemeContext';
 import Navigation from './navigation/Navigation';
+
+function AppLayout() {
+  const { colors, theme } = useTheme();
+  const isDarkTheme = theme === 'complementary';
+
+  return (
+    <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
+      <StatusBar
+        barStyle={isDarkTheme ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.bgSecondary}
+        translucent={false}
+      />
+      <Navigation />
+    </SafeAreaView>
+  );
+}
 
 function AppContent() {
   const { theme } = useContext(GlobalContext);
@@ -16,9 +33,9 @@ function AppContent() {
 
   return (
     <ThemeProvider theme={appTheme}>
-      <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-        <Navigation />
-      </SafeAreaView>
+      <SafeAreaProvider>
+        <AppLayout />
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
