@@ -28,12 +28,12 @@ const NotificationsPage = () => {
           <h1 className="page-title" style={{ margin: 0 }}>Notifications</h1>
         </div>
         <button
-          className="btn btn-primary"
-          style={{ background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          className="icon-btn icon-chip"
+          title="Add Notification"
           onClick={() => { setEditingItem(null); setModalOpen(true); }}
+          style={{ fontSize: '20px' }}
         >
-          <Plus size={18} />
-          <span>Add Notification</span>
+          <Plus size={20} />
         </button>
       </div>
 
