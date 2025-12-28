@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Modal, FlatList, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { GlobalContext } from '../../context/GlobalState';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { ChevronDown } from 'lucide-react-native';
 

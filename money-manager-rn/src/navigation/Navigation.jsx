@@ -19,20 +19,18 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TransactionsStack() {
+  const { colors } = useTheme();
   return (
     <Stack.Navigator
-      screenOptions={({ route }) => {
-        const { colors } = useTheme();
-        return {
-          headerStyle: {
-            backgroundColor: colors.bgTertiary,
-          },
-          headerTintColor: colors.textPrimary,
-          headerTitleStyle: {
-            fontWeight: '600',
-          },
-          headerShown: false,
-        };
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.bgTertiary,
+        },
+        headerTintColor: colors.textPrimary,
+        headerTitleStyle: {
+          fontWeight: '600',
+        },
+        headerShown: false,
       }}
     >
       <Stack.Screen name="TransactionsList" component={TransactionsPage} />
