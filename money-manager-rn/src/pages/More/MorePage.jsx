@@ -201,7 +201,7 @@ const MorePage = ({ navigation }) => {
                 style={[styles.closeButton, { backgroundColor: colors.accentPrimary }]}
                 onPress={() => setCurrencyModal(false)}
               >
-                <Text style={styles.closeButtonText}>Done</Text>
+                <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
