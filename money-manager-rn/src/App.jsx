@@ -10,7 +10,7 @@ function AppLayout() {
   const isDarkTheme = theme === 'complementary';
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <StatusBar
         barStyle={isDarkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.bgSecondary}

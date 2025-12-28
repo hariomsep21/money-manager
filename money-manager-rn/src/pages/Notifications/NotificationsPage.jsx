@@ -10,15 +10,16 @@ import {
   FlatList,
   Modal,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeContext';
 import { GlobalContext } from '../../context/GlobalState';
-import { Plus, Trash2, X, Save as SaveIcon } from 'lucide-react-native';
+import { Plus, Trash2, X, Save as SaveIcon, Edit2 } from 'lucide-react-native';
 import SimpleTimePicker from '../../components/SimpleTimePicker';
 
 const NotificationsPage = ({ navigation }) => {
   const { colors } = useTheme();
   const { notifications, addNotification, editNotification, removeNotification } = useContext(GlobalContext);
+  const insets = useSafeAreaInsets();
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({
@@ -97,11 +98,6 @@ const NotificationsPage = ({ navigation }) => {
           <Text style={[styles.notifTime, { color: colors.textPrimary }]}>
             {item.time}
           </Text>
-          <Switch
-            value={item.enabled}
-            onValueChange={() => handleToggle(item)}
-            trackColor={{ false: colors.borderColor, true: colors.accentGreen }}
-          />
         </View>
         <Text
           style={[styles.notifMessage, { color: colors.textSecondary }]}
@@ -113,14 +109,25 @@ const NotificationsPage = ({ navigation }) => {
           {item.recurrence === 'daily' ? 'Daily' : item.recurrence === 'weekly' ? 'Weekly' : 'Monthly'}
         </Text>
       </View>
-      <View style={styles.actions}>
+
+      <View style={styles.actionsRow}>
+        <Switch
+          value={item.enabled}
+          onValueChange={() => handleToggle(item)}
+          trackColor={{ false: colors.borderColor, true: colors.accentGreen }}
+        />
         <TouchableOpacity
           onPress={() => handleEditNotification(item)}
-          style={styles.editBtn}
+          style={styles.iconTouch}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={[styles.editText, { color: colors.accentPrimary }]}>Edit</Text>
+          <Edit2 color={colors.accentPrimary} size={20} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteBtn}>
+        <TouchableOpacity
+          onPress={() => handleDelete(item.id)}
+          style={styles.iconTouch}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
           <Trash2 color={colors.accentRed} size={20} />
         </TouchableOpacity>
       </View>
@@ -130,7 +137,7 @@ const NotificationsPage = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: colors.bgPrimary }}>
       <SafeAreaView style={{ flex: 1 }}>
-        {/* Header with title and floating add button */}
+        {/* Header */}
         <View
           style={[
             styles.header,
@@ -143,22 +150,15 @@ const NotificationsPage = ({ navigation }) => {
           <Text style={[styles.title, { color: colors.textPrimary }]}>
             Notifications
           </Text>
-          <TouchableOpacity
-            style={[
-              styles.floatingAddBtn,
-              { backgroundColor: colors.accentPrimary },
-            ]}
-            onPress={handleAddNotification}
-            activeOpacity={0.8}
-          >
-            <Plus size={24} color="#fff" />
-          </TouchableOpacity>
         </View>
 
         {/* Notifications List */}
         <ScrollView
           style={styles.container}
-          contentContainerStyle={styles.contentContainer}
+          contentContainerStyle={[
+            styles.contentContainer,
+            { paddingBottom: 120 + insets.bottom },
+          ]}
         >
           {notifications && notifications.length > 0 ? (
             <FlatList
@@ -175,6 +175,21 @@ const NotificationsPage = ({ navigation }) => {
           )}
         </ScrollView>
       </SafeAreaView>
+
+      {/* Floating Add Button */}
+      <TouchableOpacity
+        style={[
+          styles.fab,
+          {
+            backgroundColor: colors.accentPrimary,
+            bottom: 16 + insets.bottom,
+          },
+        ]}
+        onPress={handleAddNotification}
+        activeOpacity={0.85}
+      >
+        <Plus size={28} color="#fff" />
+      </TouchableOpacity>
 
       {/* Modal for Adding/Editing Notification */}
       <Modal
@@ -317,7 +332,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
-    paddingBottom: 100,
   },
   header: {
     flexDirection: 'row',
@@ -331,34 +345,35 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '700',
   },
-  floatingAddBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 24,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.28,
+    shadowRadius: 4.5,
   },
   notifItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
   },
   notifContent: {
     flex: 1,
+    gap: 4,
   },
   notifTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   notifTime: {
     fontSize: 16,
@@ -371,22 +386,19 @@ const styles = StyleSheet.create({
   notifRecurrence: {
     fontSize: 12,
   },
-  actions: {
+  actionsRow: {
+    marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginLeft: 12,
+    justifyContent: 'flex-end',
+    gap: 12,
   },
-  editBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-  },
-  editText: {
-    fontWeight: '600',
-    fontSize: 12,
-  },
-  deleteBtn: {
-    padding: 4,
+  iconTouch: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyText: {
     textAlign: 'center',

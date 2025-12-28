@@ -212,7 +212,7 @@ const MorePage = ({ navigation }) => {
       <View style={styles.section}>
         <TouchableOpacity
           style={[styles.settingRow, { backgroundColor: colors.bgTertiary }]}
-          onPress={() => navigation.navigate('Notifications')}
+          onPress={() => navigation.getParent()?.navigate('NotificationsTab')}
         >
           <Text style={[styles.settingLabel, { color: colors.textPrimary }]}>
             Manage Notifications

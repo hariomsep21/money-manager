@@ -86,8 +86,7 @@ function MainTabs() {
           backgroundColor: colors.bgTertiary,
           borderTopColor: colors.borderColor,
           borderTopWidth: 1,
-          paddingBottom: 5,
-          paddingTop: 5,
+
         },
         tabBarLabelStyle: {
           fontSize: 11,
@@ -126,6 +125,16 @@ function MainTabs() {
         }}
       />
       <Tab.Screen
+        name="NotificationsTab"
+        component={NotificationsPage}
+        options={{
+          tabBarLabel: 'Alerts',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="notifications-outline" color={color} size={size || 24} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="ProfileTab"
         component={ProfileStack}
         options={{
@@ -147,7 +156,6 @@ export default function Navigation() {
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Landing">
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="Main" component={MainTabs} />
-        <Stack.Screen name="Notifications" component={NotificationsPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
